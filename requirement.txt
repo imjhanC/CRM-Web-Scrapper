@@ -1,0 +1,4 @@
+selenium==4.25.0
+tkinter
+undetected_chromedriver==3.5.5
+# Add dependencies here 
