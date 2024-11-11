@@ -35,5 +35,4 @@ jobs:
           dist/CRMWebScrapper.exe
         draft: false
         prerelease: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
