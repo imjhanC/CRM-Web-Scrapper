@@ -1,0 +1,37 @@
+name: Build and Release EXE
+
+on:
+  push:
+    tags:
+      - 'v.0.0.1*' # Trigger on version tags
+
+jobs:
+  build:
+    runs-on: windows-latest # Use Windows runner since we're building a Windows exe
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10' # Specify your Python version
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller
+      
+    - name: Build EXE
+      run: |
+        pyinstaller --onefile --noconsole --name CRMWebScrapper WebScrap.py # Replace main.py with your entry point file
+        
+    - name: Create Release
+      id: create_release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          dist/CRMWebScrapper.exe
+        draft: false
+        prerelease: false
+      
