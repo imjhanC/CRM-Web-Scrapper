@@ -1,4 +1,5 @@
-selenium==4.25.0
+selenium
 tkinter
-undetected_chromedriver==3.5.5
-# Add dependencies here 
+undetected_chromedriver
+pyinstaller
+ 

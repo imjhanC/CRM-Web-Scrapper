@@ -1,26 +1,26 @@
-name: Build and Release EXE
+name: Build Workflow
 
 on:
   push:
-
+#    branches: master
 
 jobs:
-  build:
-    runs-on: windows-latest # Use Windows runner since we're building a Windows exe
+  build-windows:
+    runs-on: windows-latest
     steps:
-      - name: Checkout 
+      - name: Checkout
         uses: actions/checkout@v1
       - name: Install Python
         uses: actions/setup-python@v1
         with:
           python-version: '3.10'
           architecture: 'x64'
-      - name: Install requirements 
+      - name: Install requirements
         run: |
           pip install -r requirement.txt
       - name: Run PyInstaller
         run: |
-          python -m PyInstaller WebScrap.spec
+          python -m PyInstaller CRMWebScrapper.spec
       - uses: actions/upload-artifact@v2
         with:
           name: Windows_CRMWebScrapper
@@ -32,23 +32,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag.name: ${{ github.event.head_commit.message }}
+          tag_name: ${{ github.event.head_commit.message }}
           release_name: ${{ github.event.head_commit.message }}
           overwrite: true
           body: |
             Test Release v1.0.0
           draft: false
-          prerelease: false 
-      -name: Upload Release Asset
+          prerelease: false
+      - name: Upload Release Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN:  ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{steps.create_release.outputs.upload_url}}
           asset_path: dist/CRMWebScrapper.exe
-          asset_name: CRMwebscrapper.exe
+          asset_name: CRMWebScrapper.exe
           asset_content_type: application/zip
-
-    
-      
