@@ -1599,7 +1599,7 @@ def on_submit(root):
 def login_gui():
     root = tk.Tk()
     root.title("VTiger Login")
-    root.iconbitmap("crm.ico")
+    #root.iconbitmap("crm.ico")
     window_width = 400   # Set Window width HERE
     window_height = 300   # Set Window height HERE
 
