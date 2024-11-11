@@ -4,6 +4,8 @@ on:
 jobs:
   build-windows:
     runs-on: windows-latest
+    permissions: # Add permissions
+      contents: write # Required for creating releases
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -14,7 +16,6 @@ jobs:
           python-version: '3.10'
           architecture: 'x64'
       
-      # Add step to verify Python installation includes tkinter
       - name: Verify Tkinter
         run: |
           python -c "import tkinter; print('Tkinter is available')"
@@ -27,21 +28,24 @@ jobs:
       - name: Run PyInstaller
         run: |
           python -m PyInstaller --name CRMWebScrapper WebScrap.py
+          # Debug: List contents of dist directory
+          dir dist
       
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: Windows_CRMWebScrapper
-          path: dist/CRMWebScrapper.exe
+          path: ./dist/CRMWebScrapper.exe
       
       - name: Create Release
         uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/') # Only run on tags
         with:
-          files: dist/CRMWebScrapper.exe
-          tag_name: ${{ github.event.head_commit.message }}
-          name: ${{ github.event.head_commit.message }}
+          files: ./dist/CRMWebScrapper.exe
+          tag_name: v${{ github.run_number }}
+          name: Release v${{ github.run_number }}
           body: |
-            Test Release v1.0.0
+            Test Release v${{ github.run_number }}
           draft: false
           prerelease: false
         env:
