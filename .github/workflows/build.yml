@@ -36,14 +36,18 @@ jobs:
           echo "Listing dist directory contents:"
           dir dist\*.*
       
+      - name: List WebScrap contents
+        run: |
+          echo "Contents of dist/WebScrap:"
+          dir dist\WebScrap /s
+      
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: Windows_CRMWebScrapper
           path: |
             dist/
-            dist/**/*
-            dist/CRMWebScrapper*
+            dist/WebScrap/**
       
       - name: Create Release
         if: success()
@@ -59,3 +63,4 @@ jobs:
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
