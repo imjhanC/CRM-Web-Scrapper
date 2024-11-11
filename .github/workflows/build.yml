@@ -1,6 +1,6 @@
 name: Build Workflow
 on: 
-  push: #    branches: master
+  push:
 jobs:
   build-windows:
     runs-on: windows-latest
@@ -16,42 +16,45 @@ jobs:
           python-version: '3.10'
           architecture: 'x64'
       
+      - name: Verify Tkinter
+        run: |
+          python -c "import tkinter; print('Tkinter is available')"
+      
       - name: Install requirements
         run: |
           python -m pip install --upgrade pip
           pip install -r requirement.txt
           pip install pyinstaller
       
-      - name: Run PyInstaller
+      - name: Run PyInstaller and Debug
         run: |
-          python -m PyInstaller WebScrap.py
+          python -m PyInstaller --name CRMWebScrapper WebScrap.py
+          echo "Listing current directory:"
+          dir
           echo "Listing dist directory:"
           dir dist
-      
-      - name: Create ZIP Archive
-        run: |
-          cd dist
-          Compress-Archive -Path WebScrap -DestinationPath WebScrap.zip
+          echo "Listing dist directory contents:"
+          dir dist\*.*
       
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: Windows_CRMWebScrapper
-          path: dist/WebScrap.zip
+          path: |
+            dist/
+            dist/**/*
+            dist/CRMWebScrapper*
       
       - name: Create Release
+        if: success()
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ github.run_number }}
           name: Release v${{ github.run_number }}
-          files: dist/WebScrap.zip
+          files: |
+            dist/WebScrap/**
           body: |
-            Release v${{ github.run_number }}
-            
-            Instructions:
-            1. Download WebScrap.zip
-            2. Extract all files
-            3. Run WebScrap.exe from the extracted folder
+            Test Release v${{ github.run_number }}
           draft: false
           prerelease: false
         env:
