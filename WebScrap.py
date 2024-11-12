@@ -680,12 +680,15 @@ def save_and_close(driver):
         )
         logout.click()
         print("Clicked 'Logout'")
+        driver.quit()
+        driver.close()
+
 
     except Exception as e:
         print("An error occurred:", e)
 
 # This is the windows for managing the products in SOLIDCAM products like updating , adding ,or delete the products 
-def select_prod_windows():
+def select_prod_windows(): 
     # Function to handle search and highlight matching rows
     def search_and_highlight():
         query = search_var.get().lower()  # Get the search query and convert to lowercase for case-insensitive search
@@ -1419,12 +1422,14 @@ def main_windows(product_info, driver=NONE):
             if 'comment' in product and product['comment']:
                 item_name += f"\n{product['comment']}"
 
+            row_tag = 'evenrow' if i % 2 == 0 else 'oddrow'
+
             table.insert("", "end", values=(
                 i + 1, product['quantity'], item_name,
                 product['unit_selling_price'], product['total_purchase_cost'],
                 product['unit_purchase_cost'], product['total_after_discount'],
                 product['margin'], product['tax'], product['net_price']
-            ))
+            ),tags=(row_tag,))
     
     # This Function is to prevent the Treeview's column from resizing 
     # TODO : TO RESIZE the Treeview's , just comment this function so that it will resize again 
@@ -1485,9 +1490,12 @@ def main_windows(product_info, driver=NONE):
             # Now you can pass new_row_data to edit_prod_crm or handle it as needed
             edit_prod_crm(new_row_data,product_info,driver,update_treeview)
 
+        if not selected_item:
+            messagebox.showerror("Selection Error", "Please select an item to edit.")
     def on_save_and_close_click():
         # Run save_and_close in a separate thread to avoid blocking Tkinter UI
         threading.Thread(target=save_and_close, args=(driver,)).start()
+        root.destroy()
 
     root = Tk()
     root.title("Extracted data fom VTiger")
@@ -1529,6 +1537,9 @@ def main_windows(product_info, driver=NONE):
         table.heading(col, text=col)
         table.column(col, anchor="center", width=width, minwidth=width, stretch=False)  # Set fixed width
 
+    # Configure alternating row colors
+    table.tag_configure('evenrow', background='lightgray')
+    table.tag_configure('oddrow', background='white')
     # Insert rows into the Treeview
     #for i, product in enumerate(product_info):
     #    # Check if subproducts or comment exist and format them accordingly
@@ -1556,6 +1567,7 @@ def main_windows(product_info, driver=NONE):
     # Disable resizing by binding click events to prevent resizing by dragging
     # To resize it , comment the line under this comment
     table.bind("<Button-1>", handle_click)
+    
 
     # Allow frame and table to expand
     frm.columnconfigure(0, weight=1)
