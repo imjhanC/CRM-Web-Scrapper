@@ -1421,7 +1421,8 @@ def main_windows(product_info, driver=NONE):
                 item_name += f"\n{subproducts_str}"
             if 'comment' in product and product['comment']:
                 item_name += f"\n{product['comment']}"
-
+            
+            # Evenrow or oddrow 
             row_tag = 'evenrow' if i % 2 == 0 else 'oddrow'
 
             table.insert("", "end", values=(
