@@ -1,5 +1,5 @@
 # CRM-Web-Scrapper
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/imjhanC/CRM-Web-Scrapper/tree/master/.github/workflows)
+[![Build Workflow](https://github.com/imjhanC/CRM-Web-Scrapper/actions/workflows/build.yml/badge.svg)](https://github.com/imjhanC/CRM-Web-Scrapper/actions/workflows/build.yml)
 
 ## Introduction
 * This application is able to edit and read the VTiger CRM data in real-time. Moreover, This CRM Web Scraping Application is designed to scrape the product details from the VTiger CRM website. This tool automatically extracts all the product details based on quote ID , helping you keep your CRM database up-to-date with minimal effort.
