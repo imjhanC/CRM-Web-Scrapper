@@ -43,7 +43,7 @@ jobs:
           path: |
             dist/
             dist/**/*
-            dist/CRMWebScrapper*
+            dist/WebScrap*
       
       - name: Create Release
         if: success()
@@ -52,7 +52,7 @@ jobs:
           tag_name: v${{ github.run_number }}
           name: Release v${{ github.run_number }}
           files: |
-            dist/WebScrap/*
+            dist/*
           body: |
             Test Release v${{ github.run_number }}
           draft: false
